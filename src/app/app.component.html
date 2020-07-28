@@ -4,9 +4,9 @@
       <img src="./assets/logo.png" width="50px" />
     </div>
     <ul nz-menu nzTheme="dark" nzMode="horizontal">
-      <li nz-menu-item nzSelected>List</li>
-      <li nz-menu-item>Map</li>
-      <li nz-menu-item>nav 3</li>
+      <li nz-menu-item nzSelected [routerLink]="'list_cas'">List</li>
+      <li nz-menu-item >Map</li>
+      <li nz-menu-item [routerLink]="'stats'">Stats</li>
     </ul>
   </nz-header>
   <nz-content>

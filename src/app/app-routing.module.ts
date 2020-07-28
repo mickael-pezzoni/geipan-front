@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ListCasComponent } from './list-cas/list-cas.component';
+import { StatsComponent } from './stats/stats.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: 'list_cas', pathMatch: 'full'},
-  { path: 'list_cas', component: ListCasComponent}
+  { path: 'list_cas', component: ListCasComponent },
+  { path: 'stats', component: StatsComponent }
 ];
 
 @NgModule({

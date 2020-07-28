@@ -13,6 +13,12 @@ import fr from '@angular/common/locales/fr';
 import { NgZorroAntdModule } from './nz-module';
 import { ListCasComponent } from './list-cas/list-cas.component';
 import { TableComponent } from './table/table.component';
+import { NgxEchartsModule } from 'ngx-echarts';
+import { StatsComponent } from './stats/stats.component';
+import { TemoignageService } from './service/temoignage.service';
+import { CasService } from './service/cas.service';
+import { NGX_ECHARTS_CONFIG } from 'ngx-echarts/lib/ngx-echarts.directive';
+import * as echarts from 'echarts'; 
 
 registerLocaleData(fr);
 
@@ -20,7 +26,8 @@ registerLocaleData(fr);
   declarations: [
     AppComponent,
     ListCasComponent,
-    TableComponent
+    TableComponent,
+    StatsComponent
   ],
   imports: [
     BrowserModule,
@@ -28,10 +35,19 @@ registerLocaleData(fr);
     FormsModule,
     NgZorroAntdModule,
     HttpClientModule,
-    
+    NgxEchartsModule.forRoot({
+      echarts: echarts
+    }),
     BrowserAnimationsModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: fr_FR }],
+  providers: [
+    { provide: NZ_I18N, useValue: fr_FR },
+    CasService,
+    TemoignageService
+  ],
+  exports: [
+    NgxEchartsModule
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

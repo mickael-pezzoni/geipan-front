@@ -23,3 +23,13 @@ export interface Cas {
     cas_classification_calc: string;
     cas_numEtude: string;
 }
+
+
+export interface CasClassife {
+    _id: string;
+    values: Array<{ 
+        id_cas: string;
+        cas_nom_dossier: string;
+        cas_AAAA: number;}
+        >
+}
