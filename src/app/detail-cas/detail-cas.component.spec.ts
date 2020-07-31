@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListCasComponent } from './list-cas.component';
+import { DetailCasComponent } from './detail-cas.component';
 
-describe('ListCasComponent', () => {
-  let component: ListCasComponent;
-  let fixture: ComponentFixture<ListCasComponent>;
+describe('DetailCasComponent', () => {
+  let component: DetailCasComponent;
+  let fixture: ComponentFixture<DetailCasComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListCasComponent ]
+      declarations: [ DetailCasComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ListCasComponent);
+    fixture = TestBed.createComponent(DetailCasComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

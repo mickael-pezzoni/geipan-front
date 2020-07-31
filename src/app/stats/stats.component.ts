@@ -15,22 +15,27 @@ export class StatsComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.casService.allCas.length < 1) {
+      console.log('pas chargé');
       this.casService.getAllByGroup().subscribe(
         _res => {
           console.log(_res);
           this.casService.allCas = _res;
+          this.casService.setCasByYear();
           this.setchartOption();
         }
       );
     } else {
+      console.log('chargé')
       this.setchartOption();
     }
   }
 
   setchartOption(): void {
+    console.log(this.casService.allcasByYear);
     this.options = {
       title: {
         text: 'Cas',
+        //textAlign: 'center',
         left: 'center'
       },
       tooltip: {
@@ -42,15 +47,43 @@ export class StatsComponent implements OnInit {
         left: 'left',
         data: this.casService.allCas.map(_elt => _elt._id)
       },
+      label: {
+        formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+        backgroundColor: '#eee',
+        borderColor: '#aaa',
+        borderWidth: 1,
+        borderRadius: 4,
+        rich: {
+          a: {
+            color: '#999',
+            lineHeight: 22,
+            align: 'center'
+          },
+          hr: {
+            borderColor: '#aaa',
+            width: '100%',
+            borderWidth: 0.5,
+            height: 0
+          },
+          b: {
+            fontSize: 16,
+            lineHeight: 33
+          },
+          per: {
+            color: '#eee',
+            backgroundColor: '#334455',
+            padding: [2, 4],
+            borderRadius: 2
+          }
+        }
+      },
       series: [
         {
           name: 'classification',
           type: 'pie',
           radius: '55%',
           center: ['50%', '60%'],
-          data: this.casService.allCas.map(_elt => {
-            return { value: _elt.values.length, name: _elt._id }
-          }),
+          data: this.casService.getCasByClassification(),
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
@@ -62,26 +95,51 @@ export class StatsComponent implements OnInit {
       ]
     };
     //console.log(this.casService.allCas.map(_elt => _elt.values).flat());
-/*     this.optionBar = {
+    this.optionBar = {
+      title: {
+        text: 'Répartie par année',
+        left: 'center',
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c}'
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          dataZoom: {
+            yAxisIndex: 'none'
+          },
+          dataView: { readOnly: false },
+          magicType: { type: ['line', 'bar'] },
+          restore: {},
+          saveAsImage: {}
+        }
+      },
       xAxis: {
-          type: 'category',
-          data: this.casService.allCas.map(_elt => {
-            _elt.values.flat().map
-          })
+        type: 'category',
+        data: this.casService.allcasByYear.sort((a, b) => a.year - b.year).map(_elt => _elt.year)
       },
       yAxis: {
-          type: 'value'
+        type: 'value'
       },
+      dataZoom: [{
+        type: 'inside',
+        start: 0,
+        end: 100
+      }],
       series: [{
-          data: [120, 200, 150, 80, 70, 110, 130],
-          type: 'bar',
-          showBackground: true,
-          backgroundStyle: {
-              color: 'rgba(220, 220, 220, 0.8)'
-          }
+        name: 'Cas',
+        data: this.casService.allcasByYear.sort((a, b) => a.year - b.year).map(_elt => _elt.element.length),
+        type: 'bar',
+        showBackground: true,
+        backgroundStyle: {
+          color: 'rgba(220, 220, 220, 0.8)'
+        }
       }]
-  }; */
-  
+    };
+    console.log(this.optionBar);
+
   }
 
 }

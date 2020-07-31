@@ -11,19 +11,12 @@ nzSize="small"
 >
 <thead>
   <tr>
-    <th *ngFor="let header of headers" [nzColumnKey]="header.key" [nzSortFn]="true">{{ header.label }}</th>
+    <th *ngFor="let header of headerAndKeyValue" [nzColumnKey]="header.key" [nzSortFn]="true">{{ header.label }}</th>
   </tr>
 </thead>
 <tbody>
-  <tr *ngFor="let res of data">
-      <td>{{ res.id_cas }}</td>
-      <td *ngIf="dataType === 'tem'">{{ res.tem_nom_dossier }}</td>
-      <td *ngIf="dataType === 'tem'">{{ res.obs_1_adr_dpt }}</td>
-      <td *ngIf="dataType === 'tem'">{{ res.obs_date_heure | date: 'medium' }}</td>
-      <td *ngIf="dataType === 'cas'">{{ res.cas_zone_code }} - {{ res.cas_zone_nom }}</td>
-      <td *ngIf="dataType === 'cas'">{{ res.cas_classification }}</td>
-      <td *ngIf="dataType === 'cas'">{{ res.cas_nom_dossier }}</td>
-      <td *ngIf="dataType === 'cas'">{{ res.cas_AAAA }}</td>
+  <tr *ngFor="let res of data; let i = index;" (click)="selectItem(res)">
+    <td *ngFor="let value of headerAndKeyValue">{{ res[value.key] }}</td>
   </tr>
 </tbody>
 </nz-table>

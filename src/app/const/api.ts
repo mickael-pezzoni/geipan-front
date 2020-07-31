@@ -2,11 +2,13 @@ export const API = {
     URL: 'http://localhost:8080/',
     CAS: {
         ALL_GROUP: 'cas/group',
+        ALL_PAGE: 'cas/page',
         BYID: 'cas/idCas/',
-        ALL_PAGE: 'cas/page'
     },
     TEM: {
         RANGE: 'tem/range/',
-        ALL_PAGE: 'tem/page'
+        ALL_PAGE: 'tem/page',
+        BYID: 'tem/idCas/',
+        BY_CAS: 'cas/'
     }
 }

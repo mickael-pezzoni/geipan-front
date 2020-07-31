@@ -1,0 +1,72 @@
+<div class="site-page-header-ghost-wrapper">
+    <nz-page-header nzBackIcon [nzGhost]="false" (nzBack)="backPage()">
+      <nz-page-header-title>{{ casSelect.cas_nom_dossier }}</nz-page-header-title>
+      <nz-page-header-subtitle>{{ casSelect.id_cas }}</nz-page-header-subtitle>
+      <nz-page-header-extra>
+        <button nz-button (click)="editModal()"><i nz-icon nzType="edit" nzTheme="outline"></i>Correction</button>
+        <button nz-button>Operation</button>
+        <button nz-button nzType="primary">Primary</button>
+      </nz-page-header-extra>
+      <nz-page-header-content>
+        <nz-descriptions nzSize="small" [nzColumn]="3">
+          <nz-descriptions-item nzTitle="Annee" [nzSpan]="1">{{ casSelect.cas_AAAA }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Classification" [nzSpan]="1"><a>{{ casSelect.cas_classification }}</a></nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Dernière mise à jour" [nzSpan]="1">{{ casSelect.cas_date_maj | date: 'yyyy-MM-dd hh:mm' }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Département" [nzSpan]="3">{{ casSelect.cas_zone_code }} {{ casSelect.cas_zone_nom }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Resume" [nzSpan]="2">
+            {{ casSelect.cas_resume }}
+          </nz-descriptions-item>
+        </nz-descriptions>
+
+      </nz-page-header-content>
+    </nz-page-header>
+            <h2>Témoignages: </h2>
+            <nz-table #basicTable [nzData]="temByCas">
+              <thead>
+                <tr>
+                  <th>Nom du dossier</th>
+                  <th>Genre</th>
+                  <th>Age</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                  <td>{{data.tem_nom_dossier}}</td>
+                  <td>{{data.tem_genre}}</td>
+                  <td>{{data.tem_age}}</td>
+                  <td>{{data.obs_date_heure | date: 'yyyy-MM-dd'}}</td>
+                </tr>
+              </tbody>
+            </nz-table>
+  </div>
+
+  <nz-modal [(nzVisible)]="isVisible" 
+  [nzTitle]="casSelect.cas_nom_dossier" 
+  (nzOnCancel)="isVisible = !isVisible" 
+  [nzOkDisabled]="editForm.invalid"
+  (nzOnOk)="handleOk()"
+  [nzStyle]="{ width: '80%' }">
+    <form nz-form [formGroup]="editForm" (ngSubmit)="handleOk()">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="4" nzFor="title">Titre</nz-form-label>
+        <nz-form-control [nzSpan]="4">
+          <input nz-input formControlName="title" name="title" type="title" id="title">
+        </nz-form-control>
+        <nz-form-label nzRequired [nzSpan]="2" nzFor="codeZone">Code zone</nz-form-label>
+        <nz-form-control [nzSpan]="4">
+          <input nz-input name="codeZone" formControlName="codeZone" type="number" id="codeZone">
+        </nz-form-control>
+        <nz-form-label nzRequired [nzSpan]="2" nzFor="codeZoneLabel">Zone </nz-form-label>
+        <nz-form-control [nzSpan]="4">
+          <input nz-input name="codeZoneLabel" formControlName="codeZoneLabel" type="text" id="codeZoneLabel">
+        </nz-form-control>
+      </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired [nzSpan]="0" nzFor="resume">Resume</nz-form-label>
+          <nz-form-control [nzSpan]="0">
+            <textarea cols="100" rows="15" formControlName="resume" nz-input id="resume"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+    </form>
+  </nz-modal>

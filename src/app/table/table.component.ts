@@ -5,6 +5,9 @@ import { isUndefined } from 'util';
 import { Observable } from 'rxjs';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { ResultsPage } from '../interface/results-page';
+import { CasService } from '../service/cas.service';
+import { TemoignageService } from '../service/temoignage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-table',
@@ -13,40 +16,24 @@ import { ResultsPage } from '../interface/results-page';
 })
 export class TableComponent implements OnInit {
 
-  public data: Array<Cas | Temoignage>;
-
   @Input() public dataType: string;
+  @Input() public headerAndKeyValue: Array<{label: string, key: string}>[];
 
   @Input() public request: (page, pageSize) => Observable<ResultsPage>;
-
+  public data: any;
   public total = 1;
   public loading = false;
   public pageSize = 20;
   public pageIndex = 1;
-  public headers: Array<{label: string, key: string}>;
-  constructor() { }
+  constructor(public casService: CasService, 
+    public temService: TemoignageService,
+    public router: Router) { }
 
   ngOnInit(): void {
-    if (this.dataType === "tem") {
-      this.headers =  [
-        { label: "idCas", key: "id_cas"}, 
-        { label: "Nom du dossier", key: "tem_nom_dossier" }, 
-        { label: "Département", key: "obs_1_adr_dpt" }, 
-        { label: "Date", key: "obs_date_heure" }
-      ]; 
-    } else {
-      this.headers = [
-        { label: "idCas", key: "id_cas" },
-        { label: "Dépatement", key: "cas_zone_code" },
-        { label: "Classification", key: "cas_classification"},
-        { label: "Nom du dossier", key: "cas_nom_dossier"}, 
-        { label: "Année", key: "cas_AAAA"}
-      ];
-    }
     this.request(this.pageIndex, this.pageSize).subscribe(
       _res => {
         console.log(_res);
-        this.data = _res.results;
+        this.casService.casCUrrentPage = _res.results;
         this.total = _res.totalData;
         this.loading = false;
       }
@@ -58,11 +45,23 @@ export class TableComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.request(event.pageIndex, this.pageSize).subscribe(
       _res => {
-        this.data = _res.results;
+        if (this.dataType == "tem") {
+          this.temService.temCUrrentPage = _res.results;
+        } else {
+          this.casService.casCUrrentPage = _res.results;
+        }
         this.total = _res.totalData;
+        this.data = _res.results;
         this.loading = false;
       }
     );
+  }
+
+  selectItem(item: any) {
+    if (this.dataType == "tem") {
+    } else {
+      this.router.navigate(['cas-detail', item._id]);
+    }
   }
 
 
