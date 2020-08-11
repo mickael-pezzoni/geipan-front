@@ -7,6 +7,7 @@ import { TemoignageService } from '../service/temoignage.service';
 import { Temoignage } from '../interface/temoignage';
 import { StorageService } from '../service/storage.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NotifService } from '../notif.service';
 
 @Component({
   selector: 'app-detail-cas',
@@ -19,15 +20,24 @@ export class DetailCasComponent implements OnInit, OnDestroy {
   public isVisible: boolean;
   public temByCas: Temoignage[];
   public editForm: FormGroup;
-
+  public gridStyle:any
+  public visible = false;
+  public currentTem: Temoignage;
   constructor(private route: ActivatedRoute, 
     private storageService: StorageService,
+    private notifService: NotifService,
     private formBuilder: FormBuilder,
+    private router: Router,
     private temService: TemoignageService,
     private casService: CasService,
     private location: Location) {
     this.isVisible = false;
     this.temByCas = [];
+    this.currentTem = {} as Temoignage;
+    this.gridStyle = {
+      width: '30%',
+      textAlign: 'center'
+    };
     const _id = this.route.snapshot.params['idCas'];
     if (this.storageService.getCurrentCas()) {
       this.casSelect = this.storageService.getCurrentCas();
@@ -68,7 +78,36 @@ export class DetailCasComponent implements OnInit, OnDestroy {
     });
   }
 
-  handleOk() {}
+  openFile(file: {name: string, link: string}): void {
+    window.open(file.link);
+  }
+
+  handleOk() {
+    const formValue = this.editForm.value;
+    this.casSelect.cas_nom_dossier = formValue.title;
+    this.casSelect.cas_zone_code = formValue.codeZone;
+    this.casSelect.cas_zone_nom = formValue.codeZoneLabel;
+    this.casSelect.cas_resume = formValue.resume;
+    this.casService.updateCas(this.casSelect).subscribe(
+      _res => {
+        this.casService.updateCurrentPage(this.casSelect);
+        this.storageService.setCurrentCas(this.casSelect);
+        this.notifService.emitSuccess('Correction faite');
+        this.isVisible = false;
+      },
+      _err => this.notifService.emitError(_err)
+    );
+  }
+
+
+  openTem(tem: Temoignage): void {
+    this.currentTem = tem;
+    this.visible = true;
+  }
+
+  closeTem(): void {
+    this.visible = false;
+  }
 
   ngOnDestroy() {
     this.storageService.cleanCurrentCas();

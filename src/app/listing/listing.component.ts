@@ -15,8 +15,8 @@ export class ListingComponent implements OnInit {
   public headerTem: string[];
   public headerAndKeyValueCas: Array<{label: string, key: string}>;
   public headerAndKeyValueTem: Array<{label: string, key: string}>;
-  public requestCas: (page, pageSize) => Observable<ResultsPage>;
-  public requestTem: (page, pageSize) => Observable<ResultsPage>;
+  public requestCas: (page, pageSize, sort?: {key: string, value: string}) => Observable<ResultsPage>;
+  public requestTem: (page, pageSize, sort?: {key: string, value: string}) => Observable<ResultsPage>;
 
   constructor(private casService: CasService, private temService: TemoignageService) {
     this.headerAndKeyValueTem =  [
@@ -32,8 +32,8 @@ export class ListingComponent implements OnInit {
       { label: "Nom du dossier", key: "cas_nom_dossier"}, 
       { label: "Année", key: "cas_AAAA"}
     ];
-    this.requestCas = (page, pageSize) => this.casService.getAllByPage(page, pageSize);
-    this.requestTem = (page, pageSize) => this.temService.getAllByPage(page, pageSize);
+    this.requestCas = (page, pageSize, sort?: {key: string, value: string}) => this.casService.getAllByPage(page, pageSize, sort);
+    this.requestTem = (page, pageSize, sort?: {key: string, value: string}) => this.temService.getAllByPage(page, pageSize);
    }
 
 

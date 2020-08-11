@@ -19,7 +19,7 @@ export class TableComponent implements OnInit {
   @Input() public dataType: string;
   @Input() public headerAndKeyValue: Array<{label: string, key: string}>[];
 
-  @Input() public request: (page, pageSize) => Observable<ResultsPage>;
+  @Input() public request: (page, pageSize, sort?: {key: string, value: string}) => Observable<ResultsPage>;
   public data: any;
   public total = 1;
   public loading = false;
@@ -43,7 +43,9 @@ export class TableComponent implements OnInit {
   onQueryParamsChange(event: NzTableQueryParams) {
     this.loading = true;
     this.pageSize = event.pageSize;
-    this.request(event.pageIndex, this.pageSize).subscribe(
+    let sort = event.sort.filter(_elt => _elt.value !== null)[0];
+    console.log(sort);
+    this.request(event.pageIndex, this.pageSize, sort).subscribe(
       _res => {
         if (this.dataType == "tem") {
           this.temService.temCUrrentPage = _res.results;

@@ -1,7 +1,7 @@
 <div class="site-page-header-ghost-wrapper">
     <nz-page-header nzBackIcon [nzGhost]="false" (nzBack)="backPage()">
       <nz-page-header-title>{{ casSelect.cas_nom_dossier }}</nz-page-header-title>
-      <nz-page-header-subtitle>{{ casSelect.id_cas }}</nz-page-header-subtitle>
+      <nz-page-header-subtitle>{{ casSelect.cas_numEtude }}</nz-page-header-subtitle>
       <nz-page-header-extra>
         <button nz-button (click)="editModal()"><i nz-icon nzType="edit" nzTheme="outline"></i>Correction</button>
         <button nz-button>Operation</button>
@@ -17,10 +17,17 @@
             {{ casSelect.cas_resume }}
           </nz-descriptions-item>
         </nz-descriptions>
+        
+        <nz-card nzTitle="Fichier">
+          <div nz-card-grid *ngFor="let file of casSelect.files" (click)="openFile(file)" [ngStyle]="gridStyle">
+            <nz-avatar class="iconFile" nzIcon="file"></nz-avatar>
+            <a>{{ file.name }}</a>
+          </div>
+        </nz-card>`
 
       </nz-page-header-content>
     </nz-page-header>
-            <h2>Témoignages: </h2>
+            <h2 nz-typography>Témoignages: </h2>
             <nz-table #basicTable [nzData]="temByCas">
               <thead>
                 <tr>
@@ -31,15 +38,22 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let data of basicTable.data">
+                <tr *ngFor="let data of basicTable.data" class="temItem" (click)="openTem(data)">
                   <td>{{data.tem_nom_dossier}}</td>
                   <td>{{data.tem_genre}}</td>
                   <td>{{data.tem_age}}</td>
-                  <td>{{data.obs_date_heure | date: 'yyyy-MM-dd'}}</td>
+                  <td>{{data.obs_date_heure | date: 'yyyy-MM-dd hh:mm'}}</td>
                 </tr>
               </tbody>
             </nz-table>
   </div>
+  <nz-drawer [nzClosable]="false" [nzVisible]= "visible" nzPlacement="right" [nzTitle]="currentTem.tem_nom_dossier" [nzWidth]="'40%'" (nzOnClose)="closeTem()">
+    <p>Date : {{ currentTem.obs_date_heure }}</p>
+    <p>Genre : {{ currentTem.tem_genre }}</p>
+    <p>Age : {{ currentTem.tem_age }}</p>
+    <p>{{ currentTem.tem_resume }}</p>
+  </nz-drawer>
+
 
   <nz-modal [(nzVisible)]="isVisible" 
   [nzTitle]="casSelect.cas_nom_dossier" 

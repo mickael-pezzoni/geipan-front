@@ -21,6 +21,7 @@ import * as echarts from 'echarts';
 import { DetailCasComponent } from './detail-cas/detail-cas.component'; 
 import { StorageService } from './service/storage.service';
 import { ListingComponent } from './listing/listing.component';
+import { NotifService } from './notif.service';
 
 registerLocaleData(fr);
 
@@ -48,6 +49,7 @@ registerLocaleData(fr);
     { provide: NZ_I18N, useValue: fr_FR },
     CasService,
     TemoignageService,
+    NotifService,
     StorageService
   ],
   exports: [

@@ -22,6 +22,7 @@ export interface Cas {
     cas_classification: string;
     cas_classification_calc: string;
     cas_numEtude: string;
+    files: Array<{name: string, link: string}>;
 }
 
 

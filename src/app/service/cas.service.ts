@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Cas, CasClassife } from '../interface/cas';
 import { API } from '../const/api';
 import { ResultsPage } from '../interface/results-page';
+import { isUndefined } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -31,14 +32,25 @@ export class CasService {
     return this.httpClient.get<CasClassife[]>(`${API.URL}${API.CAS.ALL_GROUP}`);
   }
 
-  public getAllByPage(page: number, pageSize: number): Observable<ResultsPage> {
-    return this.httpClient.get<ResultsPage>(`${API.URL}${API.CAS.ALL_PAGE}?page=${page}&pageSize=${pageSize}`);
+  public getAllByPage(page: number, pageSize: number, sort?:{key: string, value: string}): Observable<ResultsPage> {
+    let url = `${API.URL}${API.CAS.ALL_PAGE}?page=${page}&pageSize=${pageSize}`;
+    if (!isUndefined(sort)) url += `&sort=${sort.key}&sortDirection=${sort.value}`;
+    return this.httpClient.get<ResultsPage>(url);
+  }
+
+  public updateCas(cas: Cas): Observable<void> {
+    return this.httpClient.put<void>(`${API.URL}${API.CAS.UPDATE}`, cas);
   }
 
   public getCasByClassification() {
     return this.allCas.map(_elt => {
       return { value: _elt.values.length, name: _elt._id }
     });
+  }
+
+  public updateCurrentPage(cas: Cas): void {
+    const index = this.casCUrrentPage.findIndex(_cas => _cas._id === cas._id);
+    this.casCUrrentPage[index] = cas;
   }
 
   public setCasByYear(): void {
@@ -55,8 +67,8 @@ export class CasService {
         });
       }
     });
-
   }
+  
 
 
   public getCasByIdCurrentPage(id: string): Cas {
