@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -11,5 +12,6 @@ export class AppComponent {
 
   constructor(private router: Router) {
     console.log(router.url);
+    console.log(environment.API_URL);
   }
 }

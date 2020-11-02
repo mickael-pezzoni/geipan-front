@@ -5,6 +5,7 @@ import { Cas, CasClassife } from '../interface/cas';
 import { API } from '../const/api';
 import { ResultsPage } from '../interface/results-page';
 import { isUndefined } from 'util';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -25,21 +26,21 @@ export class CasService {
 
 
   public getById(idCas: string): Observable<Cas> {
-    return this.httpClient.get<Cas>(`${API.URL}${API.CAS.BYID}/${idCas}`);
+    return this.httpClient.get<Cas>(`${environment.API_URL}${API.CAS.BYID}/${idCas}`);
   }
 
   public getAllByGroup(): Observable<CasClassife[]> {
-    return this.httpClient.get<CasClassife[]>(`${API.URL}${API.CAS.ALL_GROUP}`);
+    return this.httpClient.get<CasClassife[]>(`${environment.API_URL}${API.CAS.ALL_GROUP}`);
   }
 
   public getAllByPage(page: number, pageSize: number, sort?:{key: string, value: string}): Observable<ResultsPage> {
-    let url = `${API.URL}${API.CAS.ALL_PAGE}?page=${page}&pageSize=${pageSize}`;
+    let url = `${environment.API_URL}${API.CAS.ALL_PAGE}?page=${page}&pageSize=${pageSize}`;
     if (!isUndefined(sort)) url += `&sort=${sort.key}&sortDirection=${sort.value}`;
     return this.httpClient.get<ResultsPage>(url);
   }
 
   public updateCas(cas: Cas): Observable<void> {
-    return this.httpClient.put<void>(`${API.URL}${API.CAS.UPDATE}`, cas);
+    return this.httpClient.put<void>(`${environment.API_URL}${API.CAS.UPDATE}`, cas);
   }
 
   public getCasByClassification() {
